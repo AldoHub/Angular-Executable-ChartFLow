@@ -1,0 +1,99 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>{{title}}</span>
+    <span class="example-spacer"></span>
+  </mat-toolbar-row>
+
+
+  <mat-toolbar-row>
+    
+    <!--add node functionality-->
+    <button mat-button (click)="addNode('command')">+Command</button>
+    <button mat-button (click)="addNode('if')">+If</button>
+    <button mat-button (click)="addNode('else')">+Else</button>
+    <button mat-button (click)="addNode('while')">+While</button>
+    <button mat-button (click)="addNode('for')">+For</button>
+    <span class="example-spacer"></span>
+    <button mat-icon-button (click)="compile(treeData)"><mat-icon>play_circle</mat-icon></button>
+    <button mat-icon-button (click)="reset()"><mat-icon>restart_alt</mat-icon></button>
+
+  </mat-toolbar-row>
+</mat-toolbar>
+
+
+<div class="flow-chart-cont">
+  
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+    <!-- code in min 27:00 -->
+
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+      <div [ngSwitch]="node.name" class="mat-tree-node">
+
+        <!-- command case -->
+        <div class="flow-cont" *ngSwitchCase="'command'">
+          <div class="command-chart"></div>
+          <mat-form-field appearance="fill">
+            <mat-label>{{node.name}}</mat-label>
+            <input mat-input matNativeControl [(ngModel)]="node.code"  placeholder="a++" />
+          </mat-form-field>
+          <button mat-icon-button (click)="remove(treeData, node)"><mat-icon>delete</mat-icon></button>
+        </div>
+
+        <!-- else case -->
+        <div class="flow-cont" *ngSwitchCase="'else'">
+          <div class="else-chart"></div>
+          <mat-form-field class="else-txt" appearance="fill">
+            <input mat-input matNativeControl disabled placeholder="else" />
+          </mat-form-field>
+          <button mat-button (click)="addNodeToNode('command', node)">+Command</button>
+          <button mat-button (click)="addNodeToNode('if', node)">+If</button>
+          <button mat-button (click)="addNodeToNode('else', node)">+Else</button>
+          <button mat-button (click)="addNodeToNode('while', node)">+While</button>
+          <button mat-button (click)="addNodeToNode('for', node)">+For</button>
+          <button mat-icon-button (click)="remove(treeData, node)"><mat-icon>delete</mat-icon></button>
+        </div>
+
+        <!-- for case -->
+        <div class="flow-cont" *ngSwitchCase="'for'">
+          <div class="decision-chart"></div>
+          <mat-form-field class="else-txt" appearance="fill">
+            <mat-label>{{node.name}}</mat-label>
+            <input mat-input matNativeControl [(ngModel)]="node.code" placeholder="i=0;i&lt;10;i++" />
+          </mat-form-field>
+          <button mat-button (click)="addNodeToNode('command', node)">+Command</button>
+          <button mat-button (click)="addNodeToNode('if', node)">+If</button>
+          <button mat-button (click)="addNodeToNode('else', node)">+Else</button>
+          <button mat-button (click)="addNodeToNode('while', node)">+While</button>
+          <button mat-button (click)="addNodeToNode('for', node)">+For</button>
+          <button mat-icon-button (click)="remove(treeData, node)"><mat-icon>delete</mat-icon></button>
+        </div>
+
+          <!-- else case -->
+          <div class="flow-cont" *ngSwitchDefault>
+            <div class="else-chart"></div>
+            <mat-form-field class="else-txt" appearance="fill">
+              <mat-label>{{node.name}}</mat-label>
+              <input mat-input matNativeControl [(ngModel)]="node.code" placeholder="a&gt;10" />
+            </mat-form-field>
+            <button mat-button (click)="addNodeToNode('command', node)">+Command</button>
+            <button mat-button (click)="addNodeToNode('if', node)">+If</button>
+            <button mat-button (click)="addNodeToNode('else', node)">+Else</button>
+            <button mat-button (click)="addNodeToNode('while', node)">+While</button>
+            <button mat-button (click)="addNodeToNode('for', node)">+For</button>
+            <button mat-icon-button (click)="remove(treeData, node)"><mat-icon>delete</mat-icon></button>
+          </div>
+
+      </div>
+      <!-- way of tree to render children -->
+      <div [class.example-tree-invisible]="!treeControl.isExpanded(node)" role="group">
+        <ng-container matTreeNodeOutlet></ng-container>
+      </div>
+
+    </mat-nested-tree-node>
+  </mat-tree>
+
+</div>
+
+
+
+<!--<router-outlet></router-outlet>-->
